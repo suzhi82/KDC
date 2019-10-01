@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, xlrd, signal, random, os
+import sys, xlrd, signal, random, os, time
 
 def signal_handler(signal, frame):
   print("\nYou pressed Ctrl+C!")
   sys.exit(0)
 
 signal.signal(signal.SIGINT,signal_handler)
+
+def clear_terminal(t):
+  time.sleep(t)
+  if os.name == "posix":  # Unix-like
+    os.system("clear")
+  else:
+    os.system("cls")
 
 def read_excel():
   # check the arguments
@@ -51,6 +58,7 @@ def read_excel():
 
   # repeat until everything is ok
   i = 0
+  clear_terminal(0)
   while len(erows) > 0:
     print(erows[i][3], end='')
     kdc = input(" : ")
@@ -63,10 +71,8 @@ def read_excel():
   
     if i >= len(erows):
       i = 0
-      if os.name == "posix":  # Unix-like
-        os.system("clear")
-      else:
-        os.system("cls")
+      clear_terminal(1)
+      
 
   print("All done! Good job!!!")
 
