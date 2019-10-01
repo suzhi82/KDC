@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, xlrd, signal, random
+import sys, xlrd, signal, random, os
 
 def signal_handler(signal, frame):
   print("\nYou pressed Ctrl+C!")
@@ -63,6 +63,10 @@ def read_excel():
   
     if i >= len(erows):
       i = 0
+      if os.name == "posix":  # Unix-like
+        os.system("clear")
+      else:
+        os.system("cls")
 
   print("All done! Good job!!!")
 
