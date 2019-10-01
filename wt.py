@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, xlrd, signal
+import sys, xlrd, signal, random
 
 def signal_handler(signal, frame):
   print("\nYou pressed Ctrl+C!")
@@ -11,11 +11,13 @@ signal.signal(signal.SIGINT,signal_handler)
 
 def read_excel():
   # check the arguments
-  idx = 0
-  if len(sys.argv) < 2:
-    print("Usage:", sys.argv[0], "excelfile [sheet_index=0]")
+  idx, rflag, arglen = 0, False, len(sys.argv)
+  if arglen < 2:
+    print("Usage:", sys.argv[0], "excelfile [sheet_index=0] [random=False]")
     exit(1)
-  elif len(sys.argv) > 2:
+  elif arglen > 3:
+    rflag = bool(int(sys.argv[3]))
+  elif arglen > 2:
     idx = int(sys.argv[2]) - 1
 
   # open excel file and read the specified sheet
@@ -23,11 +25,17 @@ def read_excel():
   sheet = ExcelFile.sheet_by_index(idx)
 
   # print sheet's name and rows
-  print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows)
+  print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag)
+
+  # use random shuttle or not
+  nrange = range(sheet.nrows)
+  if rflag:
+    nrange = list(nrange)
+    random.shuffle(nrange)
 
   # print content if the column 2 is not empty
   erows = []
-  for i in range(sheet.nrows):
+  for i in nrange:
     # ignore the first row
     if i == 0:
       continue
