@@ -4,9 +4,20 @@
 import sys, xlrd 
 
 def read_excel():
-  # open excel file and read the first sheet
+  # check the arguments
+  idx = 0
+  if len(sys.argv) < 2:
+    print("Usage:", sys.argv[0], "excelfile [sheet_index=0]")
+    exit(1)
+  elif len(sys.argv) > 2:
+    idx = int(sys.argv[2]) - 1
+
+  # open excel file and read the specified sheet
   ExcelFile = xlrd.open_workbook(sys.argv[1]) 
-  sheet = ExcelFile.sheet_by_index(0)
+  sheet = ExcelFile.sheet_by_index(idx)
+
+  # print sheet's name and rows
+  print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows)
 
   # print content if the column 2 is not empty
   erows = []
