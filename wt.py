@@ -68,7 +68,6 @@ def read_excel():
 
   # print sheet's name, rows, order and range
   print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag, " Range:", "%d-%d" % (rstart, rstart + ramount - 1))
-  exit(0)
 
   # print content if the column 2 is not empty
   erows = []
