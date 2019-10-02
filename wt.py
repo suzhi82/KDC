@@ -23,29 +23,52 @@ def show_subject(qstr, astr):
   else:
     print(qstr + ' : ', end='')
 
+def usage_help():
+  print("Usage  :", sys.argv[0], "excelfile [sheet_index=1] [random=0] [start_index=1] [word_amount]")
+  print("Example:", sys.argv[0], "~/kdc.xls 2 1 20 15")
+  exit(1)
+
 def read_excel():
   # check the arguments
-  idx, rflag, arglen = 0, False, len(sys.argv)
+  idx, rflag, arglen, rstart, ramount = 0, False, len(sys.argv), 0, 0
   if arglen < 2:
-    print("Usage:", sys.argv[0], "excelfile [sheet_index=0] [random=0]")
-    exit(1)
-  elif arglen > 3:
+    usage_help()
+  
+  if arglen > 5:
+    ramount = int(sys.argv[5])
+  
+  if arglen > 4:
+    rstart = int(sys.argv[4])
+  
+  if arglen > 3:
     rflag = bool(int(sys.argv[3]))
-  elif arglen > 2:
+  
+  if arglen > 2:
     idx = int(sys.argv[2]) - 1
 
   # open excel file and read the specified sheet
   ExcelFile = xlrd.open_workbook(sys.argv[1]) 
   sheet = ExcelFile.sheet_by_index(idx)
 
-  # print sheet's name and rows
-  print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag)
-
+  # filter the range, ignore the 1st title row
+  if rstart > 0 and ramount > 0 and (rstart + ramount) < sheet.nrows:
+    nrange = range(rstart, rstart + ramount)
+  elif rstart > 0 and rstart < sheet.nrows:
+    ramount = sheet.nrows - rstart
+    nrange = range(rstart, sheet.nrows)
+  else:
+    rstart = 1
+    ramount = sheet.nrows - 1
+    nrange = range(sheet.nrows)
+  
   # use random shuttle or not
-  nrange = range(sheet.nrows)
   if rflag:
     nrange = list(nrange)
     random.shuffle(nrange)
+
+  # print sheet's name, rows, order and range
+  print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag, " Range:", "%d-%d" % (rstart, rstart + ramount - 1))
+  exit(0)
 
   # print content if the column 2 is not empty
   erows = []
