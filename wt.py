@@ -16,6 +16,13 @@ def clear_terminal(t):
   else:
     os.system("cls")
 
+def show_subject(qstr, astr):
+  t_w = os.get_terminal_size().columns
+  if (len(qstr) % t_w + len(astr) + 3) > t_w:
+    print(qstr + ' :')
+  else:
+    print(qstr + ' : ', end='')
+
 def read_excel():
   # check the arguments
   idx, rflag, arglen = 0, False, len(sys.argv)
@@ -46,13 +53,14 @@ def read_excel():
     # ignore the first row
     if i == 0:
       continue
-    # if input is wrong word, put it into the loop cycle array
+    # wrap line according to len of string
     if sheet.row_values(i)[1] != "":
-      print(sheet.row_values(i)[3], end='')
-      kdc = input(" : ")
+      show_subject(sheet.row_values(i)[3], sheet.row_values(i)[1])
+      kdc = input()
       if sheet.row_values(i)[1] == kdc:
         print("Good!", sheet.row_values(i)[2])
       else:
+        # if input is wrong word, put it into the loop cycle array
         erows.append(sheet.row_values(i))
         print("No!!!", erows[-1][1], erows[-1][2])
 
@@ -60,18 +68,18 @@ def read_excel():
   i = 0
   clear_terminal(0)
   while len(erows) > 0:
-    print(erows[i][3], end='')
-    kdc = input(" : ")
+    show_subject(erows[i][3], erows[i][1])
+    kdc = input()
     if erows[i][1] == kdc:
-      erows.pop(i)
       print("Good!", erows[i][2])
+      erows.pop(i)
     else:
       print("No!!!", erows[i][1], erows[i][2])
       i += 1
   
     if i >= len(erows):
       i = 0
-      clear_terminal(1)
+      clear_terminal(0.3)
       
 
   print("All done! Good job!!!")
