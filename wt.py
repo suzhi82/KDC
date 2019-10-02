@@ -20,7 +20,7 @@ def read_excel():
   # check the arguments
   idx, rflag, arglen = 0, False, len(sys.argv)
   if arglen < 2:
-    print("Usage:", sys.argv[0], "excelfile [sheet_index=0] [random=False]")
+    print("Usage:", sys.argv[0], "excelfile [sheet_index=0] [random=0]")
     exit(1)
   elif arglen > 3:
     rflag = bool(int(sys.argv[3]))
@@ -51,7 +51,7 @@ def read_excel():
       print(sheet.row_values(i)[3], end='')
       kdc = input(" : ")
       if sheet.row_values(i)[1] == kdc:
-        print("Good!")
+        print("Good!", sheet.row_values(i)[2])
       else:
         erows.append(sheet.row_values(i))
         print("No!!!", erows[-1][1], erows[-1][2])
@@ -64,7 +64,7 @@ def read_excel():
     kdc = input(" : ")
     if erows[i][1] == kdc:
       erows.pop(i)
-      print("Good!")
+      print("Good!", erows[i][2])
     else:
       print("No!!!", erows[i][1], erows[i][2])
       i += 1
