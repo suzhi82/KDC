@@ -67,6 +67,7 @@ def read_excel():
     random.shuffle(nrange)
 
   # print sheet's name, rows, order and range
+  clear_terminal(0)
   print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag, " Range:", "%d-%d" % (rstart, rstart + ramount - 1))
 
   # print content if the column 2 is not empty
