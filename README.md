@@ -30,7 +30,7 @@ pip3 install --upgrade pip
 pip3 install xlrd
 ```
 
-## Running Example
+## Demonstration
 ```bash
 # Load 1st sheet, Disorder, Range 5-10
 ./wt.py kdc.xls 1 1 5 6
