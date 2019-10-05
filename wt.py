@@ -16,12 +16,13 @@ def clear_terminal(t):
   else:
     os.system("cls")
 
-def show_subject(qstr, astr):
+def show_subject(qstr, astr, cidx, ttl):
   t_w = os.get_terminal_size().columns
-  if (len(qstr) % t_w + len(astr) + 3) > t_w:
-    print(qstr + ' :')
+  # '%' means formatted string or Arithmetical complement
+  if ((len("(%d/%d)" % (cidx, ttl)) + len(qstr) + 3) % t_w + len(astr)) > t_w:
+    print("(%d/%d)" % (cidx, ttl) + qstr + ' :')
   else:
-    print(qstr + ' : ', end='')
+    print("(%d/%d)" % (cidx, ttl) + qstr + ' : ', end='')
 
 def usage_help():
   print("Usage  :", sys.argv[0], "excelfile [sheet_index=1] [random=0] [start_index=1] [word_amount]")
@@ -71,14 +72,14 @@ def read_excel():
   print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag, " Range:", "%d-%d" % (rstart, rstart + ramount - 1))
 
   # print content if the column 2 is not empty
-  erows = []
+  seq, erows = 1, []
   for i in nrange:
     # ignore the first row
     if i == 0:
       continue
     # wrap line according to len of string
     if sheet.row_values(i)[1] != "":
-      show_subject(sheet.row_values(i)[3], sheet.row_values(i)[1])
+      show_subject(sheet.row_values(i)[3], sheet.row_values(i)[1], seq, ramount)
       kdc = input()
       if sheet.row_values(i)[1] == kdc:
         print("Good!", sheet.row_values(i)[2])
@@ -86,12 +87,14 @@ def read_excel():
         # if input is wrong word, put it into the loop cycle array
         erows.append(sheet.row_values(i))
         print("No!!!", erows[-1][1], erows[-1][2])
+      # increasing sequnce
+      seq += 1
 
   # repeat until everything is ok
-  i = 0
+  i, seq, ramount = 0, 1, len(erows)
   clear_terminal(0)
   while len(erows) > 0:
-    show_subject(erows[i][3], erows[i][1])
+    show_subject(erows[i][3], erows[i][1], seq, ramount)
     kdc = input()
     if erows[i][1] == kdc:
       print("Good!", erows[i][2])
@@ -99,9 +102,11 @@ def read_excel():
     else:
       print("No!!!", erows[i][1], erows[i][2])
       i += 1
+    # increasing sequnce
+    seq += 1
   
     if i >= len(erows):
-      i = 0
+      i, seq, ramount = 0, 1, len(erows)
       clear_terminal(0.3)
       
 
