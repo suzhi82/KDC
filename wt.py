@@ -91,8 +91,9 @@ def read_excel():
       seq += 1
 
   # repeat until everything is ok
-  i, seq, ramount = 0, 1, len(erows)
+  input("Press ENTER to continue...")
   clear_terminal(0)
+  i, seq, ramount = 0, 1, len(erows)
   while len(erows) > 0:
     show_subject(erows[i][3], erows[i][1], seq, ramount)
     kdc = input()
@@ -107,7 +108,8 @@ def read_excel():
   
     if i >= len(erows):
       i, seq, ramount = 0, 1, len(erows)
-      clear_terminal(0.3)
+      input("Press ENTER to continue...")
+      clear_terminal(0)
       
 
   print("All done! Good job!!!")
