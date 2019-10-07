@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys, xlrd, signal, random, os, time
+import sys, xlrd, signal, random, os
 
 def signal_handler(signal, frame):
   print("\033[01;31m" + "\nYou pressed Ctrl+C!" + "\033[00m")
@@ -9,8 +9,7 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT,signal_handler)
 
-def clear_terminal(t):
-  time.sleep(t)
+def clear_terminal():
   if os.name == "posix":  # Unix-like
     os.system("clear")
   else:
@@ -67,8 +66,13 @@ def read_excel():
     nrange = list(nrange)
     random.shuffle(nrange)
 
+  # define colours
+  RED, YELLOW, WHITE, CEND = "", "", "", ""
+  if os.name == "posix":  # Unix-like
+    RED, YELLOW, WHITE, CEND = "\033[01;31m", "\033[01;33m", "\033[01;37m", "\033[00m"
+
   # print sheet's name, rows, order and range
-  clear_terminal(0)
+  clear_terminal()
   print("Sheet.Name:", sheet.name, " Sheet.Rows:", sheet.nrows, " Random:", rflag, " Range:", "%d-%d" % (rstart, rstart + ramount - 1))
 
   # print content if the column 2 is not empty
@@ -86,13 +90,13 @@ def read_excel():
       else:
         # if input is wrong word, put it into the loop cycle array
         erows.append(sheet.row_values(i))
-        print("\033[01;31m" + "No!!!" + "\033[00m", erows[-1][1], erows[-1][2])
+        print(RED + "No!!!" + CEND, erows[-1][1], erows[-1][2])
       # increasing sequnce
       seq += 1
 
   # repeat until everything is ok
-  input("\033[01;33m" + "Press ENTER to continue..." + "\033[00m")
-  clear_terminal(0)
+  input(YELLOW + "Press ENTER to continue..." + CEND)
+  clear_terminal()
   i, seq, ramount = 0, 1, len(erows)
   while len(erows) > 0:
     show_subject(erows[i][3], erows[i][1], seq, ramount)
@@ -101,18 +105,18 @@ def read_excel():
       print("Good!", erows[i][2])
       erows.pop(i)
     else:
-      print("\033[01;31m" + "No!!!" + "\033[00m", erows[i][1], erows[i][2])
+      print(RED + "No!!!" + CEND, erows[i][1], erows[i][2])
       i += 1
     # increasing sequnce
     seq += 1
   
     if i >= len(erows):
       i, seq, ramount = 0, 1, len(erows)
-      input("\033[01;33m" + "Press ENTER to continue..." + "\033[00m")
-      clear_terminal(0)
+      input(YELLOW + "Press ENTER to continue..." + CEND)
+      clear_terminal()
       
 
-  print("\033[01;37m" + "All done! Good job!!!" + "\033[00m")
+  print(WHITE + "All done! Good job!!!" + CEND)
 
 if __name__ == '__main__':
   read_excel()
