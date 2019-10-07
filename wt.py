@@ -4,7 +4,7 @@
 import sys, xlrd, signal, random, os, time
 
 def signal_handler(signal, frame):
-  print("\nYou pressed Ctrl+C!")
+  print("\033[01;31m" + "\nYou pressed Ctrl+C!" + "\033[00m")
   sys.exit(0)
 
 signal.signal(signal.SIGINT,signal_handler)
@@ -86,12 +86,12 @@ def read_excel():
       else:
         # if input is wrong word, put it into the loop cycle array
         erows.append(sheet.row_values(i))
-        print("No!!!", erows[-1][1], erows[-1][2])
+        print("\033[01;31m" + "No!!!" + "\033[00m", erows[-1][1], erows[-1][2])
       # increasing sequnce
       seq += 1
 
   # repeat until everything is ok
-  input("Press ENTER to continue...")
+  input("\033[01;33m" + "Press ENTER to continue..." + "\033[00m")
   clear_terminal(0)
   i, seq, ramount = 0, 1, len(erows)
   while len(erows) > 0:
@@ -101,18 +101,18 @@ def read_excel():
       print("Good!", erows[i][2])
       erows.pop(i)
     else:
-      print("No!!!", erows[i][1], erows[i][2])
+      print("\033[01;31m" + "No!!!" + "\033[00m", erows[i][1], erows[i][2])
       i += 1
     # increasing sequnce
     seq += 1
   
     if i >= len(erows):
       i, seq, ramount = 0, 1, len(erows)
-      input("Press ENTER to continue...")
+      input("\033[01;33m" + "Press ENTER to continue..." + "\033[00m")
       clear_terminal(0)
       
 
-  print("All done! Good job!!!")
+  print("\033[01;37m" + "All done! Good job!!!" + "\033[00m")
 
 if __name__ == '__main__':
   read_excel()
